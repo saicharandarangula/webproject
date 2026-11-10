@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackQR – QR-Based Device and Stock Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230d9488%22/><path d=%22M25 25h20v20H25zM55 25h20v20H55zM25 55h20v20H25zM55 55h10v10H55zM65 65h10v10H65zM55 75h10v-10h10%22 fill=%22white%22/></svg>">
+</head>
+<body>
+
+    <!-- SVG Icon Sprite Definitions -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+        </symbol>
+        <symbol id="icon-devices" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="12" x="3" y="4" rx="2"/><line x1="2" x2="22" y1="20" y2="20"/><line x1="12" x2="12" y1="16" y2="20"/>
+        </symbol>
+        <symbol id="icon-stock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+        </symbol>
+        <symbol id="icon-scanner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect width="10" height="10" x="7" y="7" rx="1"/>
+        </symbol>
+        <symbol id="icon-transactions" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3 21 7l-4 4"/><path d="M3 7h18"/><path d="M7 21l-4-4 4-4"/><path d="M21 17H3"/>
+        </symbol>
+        <symbol id="icon-maintenance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </symbol>
+        <symbol id="icon-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/>
+        </symbol>
+        <symbol id="icon-categories" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/>
+        </symbol>
+        <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+        </symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5v14"/>
+        </symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </symbol>
+        <symbol id="icon-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>
+        </symbol>
+        <symbol id="icon-print" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/>
+        </symbol>
+        <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>
+        </symbol>
+        <symbol id="icon-stop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+        </symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+        </symbol>
+        <symbol id="icon-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+        </symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+        </symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </symbol>
+        <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>
+        </symbol>
+        <symbol id="icon-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>
+        </symbol>
+        <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </symbol>
+        <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+        </symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+        </symbol>
+        <symbol id="icon-stock-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M8 21h8"/>
+        </symbol>
+        <symbol id="icon-stock-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 17V5"/><path d="m16 9-4-4-4 4"/><path d="M8 21h8"/>
+        </symbol>
+        <symbol id="icon-return" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+        </symbol>
+    </svg>
+
+    <!-- App Container -->
+    <div class="app-layout">
+
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <svg class="icon-inline" style="width: 26px; height: 26px;"><use href="#icon-qr"/></svg>
+                </div>
+                <div>
+                    <h2>Track<span>QR</span></h2>
+                    <p class="admin-label">DEVICE &amp; STOCK SYSTEM</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+                    <svg class="nav-icon"><use href="#icon-dashboard"/></svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#devices" class="nav-item" data-tab="devices">
+                    <svg class="nav-icon"><use href="#icon-devices"/></svg>
+                    <span>Devices</span>
+                    <span class="badge nav-badge" id="navDevicesCount">0</span>
+                </a>
+                <a href="#stock-items" class="nav-item" data-tab="stock-items">
+                    <svg class="nav-icon"><use href="#icon-stock"/></svg>
+                    <span>Stock Items</span>
+                    <span class="badge nav-badge warning" id="navStockAlertCount" style="display: none;">0</span>
+                </a>
+                <a href="#scanner" class="nav-item" data-tab="scanner">
+                    <svg class="nav-icon"><use href="#icon-scanner"/></svg>
+                    <span>QR Scanner</span>
+                </a>
+                <a href="#stock-transactions" class="nav-item" data-tab="stock-transactions">
+                    <svg class="nav-icon"><use href="#icon-transactions"/></svg>
+                    <span>Stock Movement</span>
+                </a>
+                <a href="#maintenance" class="nav-item" data-tab="maintenance">
+                    <svg class="nav-icon"><use href="#icon-maintenance"/></svg>
+                    <span>Maintenance</span>
+                    <span class="badge nav-badge warning" id="navMaintenanceCount">0</span>
+                </a>
+                <a href="#activity" class="nav-item" data-tab="activity">
+                    <svg class="nav-icon"><use href="#icon-activity"/></svg>
+                    <span>Activity Logs</span>
+                </a>
+                <a href="#categories" class="nav-item" data-tab="categories">
+                    <svg class="nav-icon"><use href="#icon-categories"/></svg>
+                    <span>Categories</span>
+                </a>
+                <a href="#settings" class="nav-item" data-tab="settings">
+                    <svg class="nav-icon"><use href="#icon-settings"/></svg>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="storage-indicator">
+                    <span class="status-dot"></span>
+                    <div>
+                        <p class="storage-text">Offline LocalStorage</p>
+                        <small id="storageItemCount">8 Devices &bull; 8 Stock Items</small>
+                    </div>
+                </div>
+
+                <div class="sidebar-theme-row">
+                    <span class="theme-text">Dark Mode</span>
+                    <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode">
+                        <svg class="icon-inline icon-theme-sun"><use href="#icon-sun"/></svg>
+                        <svg class="icon-inline icon-theme-moon"><use href="#icon-moon"/></svg>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Content -->
+        <main class="main-content">
+
+            <!-- Topbar Header -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+                        <svg class="icon-inline"><use href="#icon-menu"/></svg>
+                    </button>
+                    <div>
+                        <div class="breadcrumbs">
+                            <span class="eyebrow" id="pageBreadcrumb">SYSTEM / OVERVIEW</span>
+                        </div>
+                        <h1 id="pageTitle">Admin Dashboard</h1>
+                    </div>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="btn btn-secondary" id="topbarScanBtn" title="Launch Camera QR Scanner">
+                        <svg class="icon-inline"><use href="#icon-camera"/></svg>
+                        <span>QR Scanner</span>
+                    </button>
+                    <button class="btn btn-secondary" id="topbarAddDeviceBtn" title="Add New Physical Device">
+                        <svg class="icon-inline"><use href="#icon-devices"/></svg>
+                        <span>+ Device</span>
+                    </button>
+                    <button class="btn btn-secondary" id="topbarAddStockBtn" title="Add New Stock Consumable">
+                        <svg class="icon-inline"><use href="#icon-stock"/></svg>
+                        <span>+ Stock Item</span>
+                    </button>
+                    <button class="btn btn-primary" id="topbarStockMovementBtn" title="Execute Stock-In or Stock-Out">
+                        <svg class="icon-inline"><use href="#icon-transactions"/></svg>
+                        <span>Stock Move</span>
+                    </button>
+                </div>
+            </header>
+
+
+            <!-- ==============================================
+                 1. UNIFIED DASHBOARD VIEW
+            =============================================== -->
+            <div class="tab-view active" id="tab-dashboard">
+
+                <!-- Welcome Hero Card -->
+                <section class="welcome-card">
+                    <div class="welcome-content">
+                        <span class="eyebrow">DUAL-MODULE INVENTORY &amp; STOCK PLATFORM</span>
+                        <h2 id="welcomeHeading">Welcome back, Administrator</h2>
+                        <p id="welcomeSubtext">Manage individually serialized hardware devices and quantity-based consumable supplies in one unified system.</p>
+                    </div>
+                    <div class="welcome-meta">
+                        <div class="welcome-date" id="currentDateDisplay">Today</div>
+                        <div class="welcome-mark">
+                            <svg class="icon-inline" style="width: 32px; height: 32px;"><use href="#icon-qr"/></svg>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Low Stock Alert Banner (conditionally displayed) -->
+                <div class="low-stock-alert-banner" id="dashAlertBanner" style="display: none;">
+                    <div class="low-stock-alert-content">
+                        <div class="low-stock-alert-icon">
+                            <svg class="icon-inline"><use href="#icon-alert"/></svg>
+                        </div>
+                        <div class="low-stock-alert-text">
+                            <h4 id="dashAlertBannerHeading">Stock Threshold Warning</h4>
+                            <p id="dashAlertBannerText">Some supplies are below minimum safety levels or out of stock. Immediate reorder recommended.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-secondary" id="dashReviewAlertsBtn">Review Low Stock</button>
+                </div>
+
+                <!-- Statistics Grid: Devices vs Stock separated -->
+                <section class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                    <!-- 1. Total Devices -->
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper blue">
+                            <svg class="icon-inline"><use href="#icon-devices"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Total Devices</p>
+                            <h2 id="dashTotalDevices">0</h2>
+                            <span class="stat-sub">Hardware assets</span>
+                        </div>
+                    </article>
+
+                    <!-- 2. Devices In Use -->
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper green">
+                            <svg class="icon-inline"><use href="#icon-check"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Devices In Use</p>
+                            <h2 id="dashInUseDevices" class="color-positive">0</h2>
+                            <span class="stat-sub positive">Assigned to staff</span>
+                        </div>
+                    </article>
+
+                    <!-- 3. Devices in Maintenance -->
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper amber">
+                            <svg class="icon-inline"><use href="#icon-maintenance"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>In Maintenance</p>
+                            <h2 id="dashMaintenanceDevices" class="color-warning">0</h2>
+                            <span class="stat-sub warning">Hardware repairs</span>
+                        </div>
+                    </article>
+
+                    <!-- 4. Total Stock Items -->
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper purple">
+                            <svg class="icon-inline"><use href="#icon-stock"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Stock Catalog Items</p>
+                            <h2 id="dashTotalStockItems" class="color-primary">0</h2>
+                            <span class="stat-sub">Consumable types</span>
+                        </div>
+                    </article>
+
+                    <!-- 5. Total Stock Quantity -->
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper blue">
+                            <svg class="icon-inline"><use href="#icon-transactions"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Total Stock Units</p>
+                            <h2 id="dashTotalStockQty">0</h2>
+                            <span class="stat-sub">Units in warehouse</span>
+                        </div>
+                    </article>
+
+                    <!-- 6. Low/Out of Stock Alerts -->
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper amber">
+                            <svg class="icon-inline"><use href="#icon-alert"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Stock Alerts</p>
+                            <h2 id="dashStockAlerts" class="color-warning">0</h2>
+                            <span class="stat-sub warning" id="dashStockAlertSub">Low / Out-of-stock</span>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- Dashboard Content Grid -->
+                <section class="dashboard-grid">
+
+                    <!-- Left: Recent Stock Transactions -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Recent Stock Movements</h2>
+                                <p>Latest receipts, dispatches, and supply returns</p>
+                            </div>
+                            <button class="btn btn-sm btn-ghost" id="dashViewAllTxnBtn">View All History</button>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Txn ID</th>
+                                        <th>Stock Item</th>
+                                        <th>Movement</th>
+                                        <th>Qty</th>
+                                        <th>Balance</th>
+                                        <th>Date</th>
+                                        <th>Reference</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dashRecentTransactionsTable">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Quick Actions & Categories -->
+                    <div class="dashboard-sidebar-column">
+
+                        <!-- Quick Actions Panel -->
+                        <div class="panel quick-actions-panel">
+                            <h2>Quick Actions</h2>
+                            <p>Fast access to common workflows</p>
+
+                            <div class="quick-action-list">
+                                <button class="btn btn-primary btn-block" id="dashAddDeviceBtn">
+                                    <svg class="icon-inline"><use href="#icon-devices"/></svg>
+                                    <span>Register New Device</span>
+                                </button>
+                                <button class="btn btn-secondary btn-block" id="dashAddStockItemBtn">
+                                    <svg class="icon-inline"><use href="#icon-stock"/></svg>
+                                    <span>Add Stock Item</span>
+                                </button>
+                                <button class="btn btn-secondary btn-block" id="dashExecuteStockInBtn">
+                                    <svg class="icon-inline"><use href="#icon-stock-in"/></svg>
+                                    <span>Receive Inventory (Stock-In)</span>
+                                </button>
+                                <button class="btn btn-secondary btn-block" id="dashExecuteStockOutBtn">
+                                    <svg class="icon-inline"><use href="#icon-stock-out"/></svg>
+                                    <span>Issue Supplies (Stock-Out)</span>
+                                </button>
+                                <button class="btn btn-secondary btn-block" id="dashOpenScannerBtn">
+                                    <svg class="icon-inline"><use href="#icon-camera"/></svg>
+                                    <span>Launch QR Scanner</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Category Breakdown Card -->
+                        <div class="panel category-distribution-panel">
+                            <div class="panel-header">
+                                <h2>Category Distribution</h2>
+                                <button class="btn btn-sm btn-ghost" id="dashManageCategoriesBtn">Manage</button>
+                            </div>
+                            <div id="dashCategoryBars" class="category-bars-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- Dashboard Recent Activity Feed -->
+                <section class="panel dashboard-activity-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Recent System Activity &amp; Audit Log</h2>
+                            <p>Chronological record of device assignments, stock changes, and scans</p>
+                        </div>
+                        <button class="btn btn-sm btn-ghost" id="dashViewAllActivityBtn">View Full Log</button>
+                    </div>
+
+                    <div class="activity-timeline" id="dashRecentActivityList">
+                        <!-- Populated dynamically -->
+                    </div>
+                </section>
+
+            </div>
+
+
+            <!-- ==============================================
+                 2. DEVICE MANAGEMENT VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-devices">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Device Management</h2>
+                        <p>Individually serialized hardware: laptops, monitors, projectors, printers, and network appliances.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" id="deviceExportBtn">
+                            <svg class="icon-inline"><use href="#icon-download"/></svg>
+                            <span>Export Devices (CSV)</span>
+                        </button>
+                        <button class="btn btn-primary" id="deviceAddBtn">
+                            <svg class="icon-inline"><use href="#icon-plus"/></svg>
+                            <span>Register Device</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters & Controls Bar -->
+                <div class="panel filter-panel">
+                    <div class="filter-controls-row">
+                        <div class="search-field-wrapper">
+                            <svg class="field-icon"><use href="#icon-search"/></svg>
+                            <input type="text" id="deviceSearchInput" placeholder="Search devices by name, ID, serial, location, or user..." autocomplete="off">
+                            <button class="clear-search-btn" id="deviceClearSearchBtn" title="Clear Search">&times;</button>
+                        </div>
+
+                        <div class="filter-dropdowns">
+                            <select id="deviceFilterCategory" class="form-select">
+                                <option value="all">All Categories</option>
+                            </select>
+
+                            <select id="deviceFilterStatus" class="form-select">
+                                <option value="all">All Statuses</option>
+                                <option value="Available">Available</option>
+                                <option value="In Use">In Use</option>
+                                <option value="Under Maintenance">Under Maintenance</option>
+                            </select>
+
+                            <select id="deviceFilterCondition" class="form-select">
+                                <option value="all">All Conditions</option>
+                                <option value="New">New</option>
+                                <option value="Good" selected>Good</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Damaged">Damaged</option>
+                            </select>
+
+                            <select id="deviceFilterSort" class="form-select">
+                                <option value="name_asc">Sort: Name (A-Z)</option>
+                                <option value="name_desc">Sort: Name (Z-A)</option>
+                                <option value="id_asc">Sort: Asset ID (Asc)</option>
+                                <option value="id_desc">Sort: Asset ID (Desc)</option>
+                                <option value="date_desc">Sort: Purchase Date (Newest)</option>
+                                <option value="cost_desc">Sort: Value (High to Low)</option>
+                            </select>
+
+                            <button class="btn btn-secondary" id="deviceFilterResetBtn" title="Reset All Filters">
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Filters Summary -->
+                    <div class="filter-meta-row">
+                        <span id="deviceResultsCount">Showing 0 devices</span>
+                        <div class="filter-tags" id="deviceFilterTags"></div>
+                    </div>
+                </div>
+
+                <!-- Devices Data Table -->
+                <div class="panel">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Asset ID</th>
+                                    <th>Device Name</th>
+                                    <th>Category</th>
+                                    <th>Serial Number</th>
+                                    <th>Location</th>
+                                    <th>Assigned Person / Dept</th>
+                                    <th>Condition</th>
+                                    <th>Status</th>
+                                    <th>QR Code</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deviceTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State for Devices -->
+                    <div class="empty-state" id="deviceEmptyState" style="display: none;">
+                        <div class="empty-state-icon">
+                            <svg class="icon-inline" style="width: 48px; height: 48px;"><use href="#icon-devices"/></svg>
+                        </div>
+                        <h3>No Devices Found</h3>
+                        <p id="deviceEmptyText">Try adjusting your filters or register a new physical device.</p>
+                        <button class="btn btn-primary" id="deviceEmptyAddBtn">
+                            <svg class="icon-inline"><use href="#icon-plus"/></svg>
+                            <span>Register New Device</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 3. STOCK MANAGEMENT VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-stock-items">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Stock Management (Consumables &amp; Supplies)</h2>
+                        <p>Quantity-based supplies: cables, adapters, mice, keyboards, batteries, and accessories.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" id="stockMoveBtn">
+                            <svg class="icon-inline"><use href="#icon-transactions"/></svg>
+                            <span>Stock Movement (+ / -)</span>
+                        </button>
+                        <button class="btn btn-secondary" id="stockExportBtn">
+                            <svg class="icon-inline"><use href="#icon-download"/></svg>
+                            <span>Export Stock (CSV)</span>
+                        </button>
+                        <button class="btn btn-primary" id="stockAddBtn">
+                            <svg class="icon-inline"><use href="#icon-plus"/></svg>
+                            <span>Add Stock Item</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stock Summary KPI Row -->
+                <div class="stats-grid" style="margin-bottom: 20px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper purple">
+                            <svg class="icon-inline"><use href="#icon-stock"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Unique Stock Items</p>
+                            <h2 id="stockKpiTotalItems">0</h2>
+                            <span class="stat-sub">Catalog types</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper blue">
+                            <svg class="icon-inline"><use href="#icon-transactions"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Total Stock Quantity</p>
+                            <h2 id="stockKpiTotalUnits">0</h2>
+                            <span class="stat-sub">Physical units in stock</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper amber">
+                            <svg class="icon-inline"><use href="#icon-alert"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Low Stock Items</p>
+                            <h2 id="stockKpiLowCount" class="color-warning">0</h2>
+                            <span class="stat-sub warning">At or below minimum</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper red">
+                            <svg class="icon-inline"><use href="#icon-close"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Out of Stock</p>
+                            <h2 id="stockKpiOutCount" class="color-danger">0</h2>
+                            <span class="stat-sub" style="color: var(--danger);">0 units available</span>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Stock Filters & Controls -->
+                <div class="panel filter-panel">
+                    <div class="filter-controls-row">
+                        <div class="search-field-wrapper">
+                            <svg class="field-icon"><use href="#icon-search"/></svg>
+                            <input type="text" id="stockSearchInput" placeholder="Search stock items by name, ID, location, or supplier..." autocomplete="off">
+                            <button class="clear-search-btn" id="stockClearSearchBtn" title="Clear Search">&times;</button>
+                        </div>
+
+                        <div class="filter-dropdowns">
+                            <select id="stockFilterCategory" class="form-select">
+                                <option value="all">All Categories</option>
+                            </select>
+
+                            <select id="stockFilterLevel" class="form-select">
+                                <option value="all">All Stock Levels</option>
+                                <option value="healthy">In Stock (Healthy)</option>
+                                <option value="low">Low Stock (≤ Min)</option>
+                                <option value="out">Out of Stock (0 Available)</option>
+                            </select>
+
+                            <select id="stockFilterSort" class="form-select">
+                                <option value="name_asc">Sort: Name (A-Z)</option>
+                                <option value="name_desc">Sort: Name (Z-A)</option>
+                                <option value="id_asc">Sort: Stock ID (Asc)</option>
+                                <option value="qty_desc">Sort: Qty (High to Low)</option>
+                                <option value="qty_asc">Sort: Qty (Low to High)</option>
+                            </select>
+
+                            <button class="btn btn-secondary" id="stockFilterResetBtn" title="Reset All Filters">
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filter-meta-row">
+                        <span id="stockResultsCount">Showing 0 stock items</span>
+                        <div class="filter-tags" id="stockFilterTags"></div>
+                    </div>
+                </div>
+
+                <!-- Stock Items Data Table -->
+                <div class="panel">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Stock ID</th>
+                                    <th>Item Name</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Available Qty</th>
+                                    <th>Min Stock</th>
+                                    <th>Unit</th>
+                                    <th>Unit Cost</th>
+                                    <th>Status</th>
+                                    <th>QR Code</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State for Stock Items -->
+                    <div class="empty-state" id="stockEmptyState" style="display: none;">
+                        <div class="empty-state-icon">
+                            <svg class="icon-inline" style="width: 48px; height: 48px;"><use href="#icon-stock"/></svg>
+                        </div>
+                        <h3>No Stock Items Found</h3>
+                        <p id="stockEmptyText">Try adjusting search parameters or add a new stock supply item.</p>
+                        <button class="btn btn-primary" id="stockEmptyAddBtn">
+                            <svg class="icon-inline"><use href="#icon-plus"/></svg>
+                            <span>Add New Stock Item</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 4. QR SCANNER VIEW (DUAL-MODULE DETECTION)
+            =============================================== -->
+            <div class="tab-view" id="tab-scanner">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Smart QR Code Scanner</h2>
+                        <p>Scans physical tags and automatically identifies whether the item is a <strong>Device</strong> or a <strong>Stock Consumable</strong>.</p>
+                    </div>
+                </div>
+
+                <!-- Scanner Security Notice -->
+                <div class="banner-notice" id="scannerSecurityBanner">
+                    <svg class="icon-inline"><use href="#icon-alert"/></svg>
+                    <div>
+                        <strong>Camera Requirements:</strong>
+                        <span>Camera access requires HTTPS or <code>localhost</code> / <code>127.0.0.1</code>. If running offline under <code>file://</code> without webcam support, use the <strong>Image Upload</strong> or <strong>Manual ID Lookup</strong> below.</span>
+                    </div>
+                </div>
+
+                <div class="scanner-grid">
+
+                    <!-- Left: Camera Scanner Viewport -->
+                    <div class="panel scanner-main-panel">
+                        <div class="scanner-toolbar">
+                            <div class="camera-select-wrap">
+                                <label for="cameraDeviceSelect" class="form-label-inline">Camera:</label>
+                                <select id="cameraDeviceSelect" class="form-select">
+                                    <option value="">Detecting cameras...</option>
+                                </select>
+                            </div>
+
+                            <div class="scanner-button-group">
+                                <button class="btn btn-success" id="startScannerBtn">
+                                    <svg class="icon-inline"><use href="#icon-camera"/></svg>
+                                    <span>Start Scanner</span>
+                                </button>
+                                <button class="btn btn-danger" id="stopScannerBtn" disabled>
+                                    <svg class="icon-inline"><use href="#icon-stop"/></svg>
+                                    <span>Stop Scanner</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Viewport Box -->
+                        <div class="scanner-viewport-wrapper">
+                            <div id="qrReader" class="qr-reader-container">
+                                <!-- html5-qrcode video element attaches here -->
+                            </div>
+
+                            <!-- Animated Target Laser Box -->
+                            <div class="scanner-overlay-box" id="scannerOverlayBox">
+                                <div class="scanner-laser-line"></div>
+                                <div class="scanner-corner tl"></div>
+                                <div class="scanner-corner tr"></div>
+                                <div class="scanner-corner bl"></div>
+                                <div class="scanner-corner br"></div>
+                                <span class="scanner-aim-text">Position QR code inside frame</span>
+                            </div>
+
+                            <!-- Idle Placeholder -->
+                            <div class="scanner-idle-placeholder" id="scannerIdlePlaceholder">
+                                <svg class="icon-inline idle-icon"><use href="#icon-qr"/></svg>
+                                <h3>Camera is Inactive</h3>
+                                <p>Click <strong>"Start Scanner"</strong> above to grant camera permission and scan QR codes.</p>
+                            </div>
+                        </div>
+
+                        <!-- Status Message Strip -->
+                        <div class="scanner-status-strip" id="scannerStatusStrip">
+                            <span class="status-indicator-dot" id="scannerStatusDot"></span>
+                            <span id="scannerStatusMessage">Camera idle. Ready to scan.</span>
+                        </div>
+
+                        <!-- File Dropzone -->
+                        <div class="scanner-file-box">
+                            <p class="file-box-title">Or decode a saved QR code image:</p>
+                            <div class="file-dropzone" id="qrFileDropzone">
+                                <input type="file" id="qrFileInput" accept="image/*" class="file-input-hidden">
+                                <svg class="icon-inline dropzone-icon"><use href="#icon-download"/></svg>
+                                <span>Click or Drag &amp; Drop QR Image to Scan</span>
+                                <small>PNG, JPG, WEBP formats supported</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Dynamic Scan Results & Lookup -->
+                    <div class="scanner-results-panel">
+
+                        <!-- Manual ID Lookup Form -->
+                        <div class="panel">
+                            <h3>Manual Asset / Stock Lookup</h3>
+                            <p class="panel-sub">Look up any Device Asset ID (e.g. LAP-001) or Stock Item ID (e.g. STK-CBL-001)</p>
+
+                            <form id="manualLookupForm" class="manual-lookup-form">
+                                <div class="input-with-button">
+                                    <input type="text" id="manualAssetIdInput" placeholder="Enter ID (e.g. LAP-001 or STK-CBL-001)" uppercase autocomplete="off" required>
+                                    <button type="submit" class="btn btn-primary" id="manualLookupBtn">
+                                        <svg class="icon-inline"><use href="#icon-search"/></svg>
+                                        <span>Lookup</span>
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="quick-sample-ids">
+                                <small>Quick test IDs (click to lookup):</small>
+                                <div class="sample-tag-list" id="sampleLookupTags">
+                                    <!-- Populated dynamically with devices and stock IDs -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scanned Result Card Container -->
+                        <div class="panel scanned-result-panel" id="scannedResultPanel">
+                            <div class="scanned-card-header">
+                                <h3>Scan Recognition</h3>
+                                <span class="badge" id="scannedResultBadge">Awaiting Scan</span>
+                            </div>
+
+                            <!-- Default Prompt -->
+                            <div class="scanned-empty" id="scannedEmptyMessage">
+                                <svg class="icon-inline"><use href="#icon-scanner"/></svg>
+                                <p>Scan a QR code or enter an ID above. The scanner will automatically detect if it is a <strong>Device</strong> or a <strong>Stock Item</strong> and load the corresponding management controls.</p>
+                            </div>
+
+                            <!-- CASE A: DEVICE DETECTED -->
+                            <div class="scanned-asset-details" id="scannedDeviceDetails" style="display: none;">
+                                <div class="scanned-type-tag device">
+                                    <svg class="icon-inline" style="width: 14px; height: 14px;"><use href="#icon-devices"/></svg>
+                                    <span>DEVICE ASSET</span>
+                                </div>
+                                <div class="scanned-hero">
+                                    <div>
+                                        <span class="scanned-id-badge" id="scannedDeviceId">LAP-001</span>
+                                        <h2 id="scannedDeviceName">MacBook Pro 16</h2>
+                                        <p class="scanned-category" id="scannedDeviceCategory">Laptops &amp; Computers</p>
+                                    </div>
+                                    <div class="scanned-status-pill" id="scannedDeviceStatus">Available</div>
+                                </div>
+
+                                <div class="scanned-metadata-grid">
+                                    <div class="meta-item">
+                                        <label>Serial Number</label>
+                                        <span id="scannedDeviceSerial">C02XYZ123ABC</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <label>Location</label>
+                                        <span id="scannedDeviceLocation">Floor 3 - Engineering</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <label>Assigned To</label>
+                                        <span id="scannedDeviceAssigned">Sarah Jenkins</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <label>Condition</label>
+                                        <span id="scannedDeviceCondition">Good</span>
+                                    </div>
+                                </div>
+
+                                <!-- Device Maintenance History -->
+                                <div class="scanned-maint-history" id="scannedDeviceMaintSection">
+                                    <h4>Device Maintenance History</h4>
+                                    <div id="scannedDeviceMaintList">
+                                        <!-- Populated dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="scanned-actions">
+                                    <p class="scanned-action-label">Quick Status Transition:</p>
+                                    <div class="status-btn-group">
+                                        <button class="btn btn-sm btn-outline-success" id="scanDevSetAvailableBtn">Set Available</button>
+                                        <button class="btn btn-sm btn-outline-primary" id="scanDevSetInUseBtn">Set In Use</button>
+                                        <button class="btn btn-sm btn-outline-warning" id="scanDevSetMaintBtn">Send to Maintenance</button>
+                                    </div>
+
+                                    <div class="scanned-secondary-actions" style="margin-top: 12px; display: flex; gap: 8px;">
+                                        <button class="btn btn-sm btn-secondary" id="scanDevPassportBtn">
+                                            <svg class="icon-inline"><use href="#icon-qr"/></svg>
+                                            <span>Full Passport &amp; Tag</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary" id="scanDevScheduleMaintBtn">
+                                            <svg class="icon-inline"><use href="#icon-maintenance"/></svg>
+                                            <span>Schedule Repair</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CASE B: STOCK ITEM DETECTED -->
+                            <div class="scanned-asset-details" id="scannedStockDetails" style="display: none;">
+                                <div class="scanned-type-tag stock">
+                                    <svg class="icon-inline" style="width: 14px; height: 14px;"><use href="#icon-stock"/></svg>
+                                    <span>STOCK CONSUMABLE</span>
+                                </div>
+                                <div class="scanned-hero">
+                                    <div>
+                                        <span class="scanned-id-badge" id="scannedStockId">STK-CBL-001</span>
+                                        <h2 id="scannedStockName">USB-C to HDMI 4K Cable</h2>
+                                        <p class="scanned-category" id="scannedStockCategory">Cables &amp; Adapters</p>
+                                    </div>
+                                    <div class="scanned-status-pill" id="scannedStockStatus">In Stock</div>
+                                </div>
+
+                                <!-- Stock Quantities Card -->
+                                <div class="scanned-stock-qty-box">
+                                    <div class="scanned-stock-stat">
+                                        <label>Available Quantity</label>
+                                        <span id="scannedStockAvailable" style="color: var(--primary);">24 pcs</span>
+                                    </div>
+                                    <div class="scanned-stock-stat">
+                                        <label>Minimum Stock Level</label>
+                                        <span id="scannedStockMinLevel">10 pcs</span>
+                                    </div>
+                                </div>
+
+                                <div class="scanned-metadata-grid">
+                                    <div class="meta-item">
+                                        <label>Storage Location</label>
+                                        <span id="scannedStockLocation">Cabinet A - Shelf 1</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <label>Unit of Measure</label>
+                                        <span id="scannedStockUnit">pcs</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <label>Unit Cost</label>
+                                        <span id="scannedStockCost">$14.99</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <label>Supplier</label>
+                                        <span id="scannedStockSupplier">Anker Direct</span>
+                                    </div>
+                                </div>
+
+                                <div class="scanned-actions">
+                                    <p class="scanned-action-label">Stock Movement Operations:</p>
+                                    <div class="scanned-stock-actions">
+                                        <button class="btn btn-sm btn-success" id="scanStockInBtn">
+                                            <svg class="icon-inline"><use href="#icon-stock-in"/></svg>
+                                            <span>+ Stock-In</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" id="scanStockOutBtn">
+                                            <svg class="icon-inline"><use href="#icon-stock-out"/></svg>
+                                            <span>- Stock-Out</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary" id="scanStockReturnBtn">
+                                            <svg class="icon-inline"><use href="#icon-return"/></svg>
+                                            <span>↩ Return Item</span>
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary" id="scanStockTagBtn">
+                                            <svg class="icon-inline"><use href="#icon-qr"/></svg>
+                                            <span>Stock Tag &amp; QR</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CASE C: UNKNOWN ID -->
+                            <div class="scanned-unknown" id="scannedUnknownAlert" style="display: none;">
+                                <div class="unknown-icon">
+                                    <svg class="icon-inline"><use href="#icon-alert"/></svg>
+                                </div>
+                                <h4 id="unknownScannedIdTitle">Identifier Not Found</h4>
+                                <p id="unknownScannedIdMessage">No registered device or stock consumable matches the scanned code. Would you like to create a new record with this identifier?</p>
+                                <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+                                    <button class="btn btn-primary" id="scannedCreateDeviceBtn">
+                                        <svg class="icon-inline"><use href="#icon-devices"/></svg>
+                                        <span>Register as Device</span>
+                                    </button>
+                                    <button class="btn btn-secondary" id="scannedCreateStockBtn">
+                                        <svg class="icon-inline"><use href="#icon-stock"/></svg>
+                                        <span>Register as Stock Item</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Session Scan History -->
+                        <div class="panel">
+                            <h3>Session Scan History</h3>
+                            <div class="session-history-list" id="scannerSessionHistory">
+                                <p class="empty-hint">No items scanned this session.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 5. STOCK TRANSACTIONS & MOVEMENTS VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-stock-transactions">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Stock Movement &amp; Audit Trail</h2>
+                        <p>Execute functional stock receipts, issues, and returns with strict quantity validation and balance tracking.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" id="txExportBtn">
+                            <svg class="icon-inline"><use href="#icon-download"/></svg>
+                            <span>Export Transactions (CSV)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transaction Execution Form Panel with Segmented Tabs -->
+                <div class="panel" style="margin-bottom: 24px;">
+                    <div class="tx-tabs-nav">
+                        <button class="tx-tab-btn tx-in active" id="tabBtnStockIn" type="button">
+                            <svg class="icon-inline"><use href="#icon-stock-in"/></svg>
+                            <span>Stock-In (Receive Inventory)</span>
+                        </button>
+                        <button class="tx-tab-btn tx-out" id="tabBtnStockOut" type="button">
+                            <svg class="icon-inline"><use href="#icon-stock-out"/></svg>
+                            <span>Stock-Out (Issue Supplies)</span>
+                        </button>
+                        <button class="tx-tab-btn tx-return" id="tabBtnStockReturn" type="button">
+                            <svg class="icon-inline"><use href="#icon-return"/></svg>
+                            <span>Stock Return (Return to Inventory)</span>
+                        </button>
+                    </div>
+
+                    <!-- 1. Stock-In Form -->
+                    <div class="tx-form-panel active" id="panelStockIn">
+                        <form id="formStockIn">
+                            <div class="form-row">
+                                <div class="form-group flex-2">
+                                    <label for="inStockItemSelect">Select Stock Item <span class="required">*</span></label>
+                                    <select id="inStockItemSelect" class="form-select" required>
+                                        <option value="">Select consumable item...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="inQuantity">Quantity Received <span class="required">*</span></label>
+                                    <input type="number" id="inQuantity" class="form-input" min="1" step="1" placeholder="e.g. 10" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="inDate">Date <span class="required">*</span></label>
+                                    <input type="date" id="inDate" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group flex-1">
+                                    <label for="inSupplier">Supplier / Source <span class="required">*</span></label>
+                                    <input type="text" id="inSupplier" class="form-input" placeholder="e.g. Anker Direct or Dell Commercial" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="inReference">Reference / Purchase Order #</label>
+                                    <input type="text" id="inReference" class="form-input" placeholder="e.g. PO-2024-0891">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inNotes">Transaction Notes &amp; Remarks</label>
+                                <input type="text" id="inNotes" class="form-input" placeholder="Optional delivery notes, shipment tracking, or batch details...">
+                            </div>
+
+                            <!-- Live Calculation Preview -->
+                            <div class="tx-calculation-preview" id="inCalcPreview">
+                                <div class="tx-calc-item">
+                                    <span class="tx-calc-label">Current Stock:</span>
+                                    <span class="tx-calc-val" id="inPrevStockDisplay">--</span>
+                                </div>
+                                <span class="tx-calc-arrow">&rarr;</span>
+                                <div class="tx-calc-item">
+                                    <span class="tx-calc-label">Updated Stock:</span>
+                                    <span class="tx-calc-val positive" id="inNewStockDisplay">--</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success" id="btnSubmitStockIn">
+                                <svg class="icon-inline"><use href="#icon-check"/></svg>
+                                <span>Complete Stock-In (+)</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 2. Stock-Out Form -->
+                    <div class="tx-form-panel" id="panelStockOut">
+                        <form id="formStockOut">
+                            <div class="form-row">
+                                <div class="form-group flex-2">
+                                    <label for="outStockItemSelect">Select Stock Item <span class="required">*</span></label>
+                                    <select id="outStockItemSelect" class="form-select" required>
+                                        <option value="">Select consumable item...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="outQuantity">Quantity to Issue <span class="required">*</span></label>
+                                    <input type="number" id="outQuantity" class="form-input" min="1" step="1" placeholder="e.g. 2" required>
+                                    <div class="form-error" id="outQuantityError" style="display: none;">Cannot exceed available stock!</div>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="outDate">Date <span class="required">*</span></label>
+                                    <input type="date" id="outDate" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group flex-1">
+                                    <label for="outRecipient">Recipient / Department <span class="required">*</span></label>
+                                    <input type="text" id="outRecipient" class="form-input" placeholder="e.g. Sarah Jenkins (Engineering)" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="outPurpose">Purpose / Reason <span class="required">*</span></label>
+                                    <input type="text" id="outPurpose" class="form-input" placeholder="e.g. New Employee Onboarding Setup" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="outReference">Requisition / Ticket #</label>
+                                    <input type="text" id="outReference" class="form-input" placeholder="e.g. REQ-2024-112">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="outNotes">Notes &amp; Authorization</label>
+                                <input type="text" id="outNotes" class="form-input" placeholder="Authorized by manager, project code, or allocation remarks...">
+                            </div>
+
+                            <!-- Live Calculation Preview -->
+                            <div class="tx-calculation-preview" id="outCalcPreview">
+                                <div class="tx-calc-item">
+                                    <span class="tx-calc-label">Available Now:</span>
+                                    <span class="tx-calc-val" id="outPrevStockDisplay">--</span>
+                                </div>
+                                <span class="tx-calc-arrow">&rarr;</span>
+                                <div class="tx-calc-item">
+                                    <span class="tx-calc-label">Remaining After Issue:</span>
+                                    <span class="tx-calc-val negative" id="outNewStockDisplay">--</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" id="btnSubmitStockOut">
+                                <svg class="icon-inline"><use href="#icon-stock-out"/></svg>
+                                <span>Confirm Stock-Out (-)</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 3. Stock Return Form -->
+                    <div class="tx-form-panel" id="panelStockReturn">
+                        <form id="formStockReturn">
+                            <div class="form-row">
+                                <div class="form-group flex-2">
+                                    <label for="returnStockItemSelect">Select Stock Item <span class="required">*</span></label>
+                                    <select id="returnStockItemSelect" class="form-select" required>
+                                        <option value="">Select consumable item to return...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="returnQuantity">Quantity Returned <span class="required">*</span></label>
+                                    <input type="number" id="returnQuantity" class="form-input" min="1" step="1" placeholder="e.g. 1" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="returnDate">Date <span class="required">*</span></label>
+                                    <input type="date" id="returnDate" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group flex-1">
+                                    <label for="returnBy">Returned By (Staff / Dept) <span class="required">*</span></label>
+                                    <input type="text" id="returnBy" class="form-input" placeholder="e.g. Alex Ray (Contractor Exit)" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="returnReference">Return Slip / Ref #</label>
+                                    <input type="text" id="returnReference" class="form-input" placeholder="e.g. RET-2024-001">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="returnNotes">Condition &amp; Return Notes</label>
+                                <input type="text" id="returnNotes" class="form-input" placeholder="Unopened in box, verified functional, etc...">
+                            </div>
+
+                            <!-- Live Calculation Preview -->
+                            <div class="tx-calculation-preview" id="returnCalcPreview">
+                                <div class="tx-calc-item">
+                                    <span class="tx-calc-label">Current Stock:</span>
+                                    <span class="tx-calc-val" id="returnPrevStockDisplay">--</span>
+                                </div>
+                                <span class="tx-calc-arrow">&rarr;</span>
+                                <div class="tx-calc-item">
+                                    <span class="tx-calc-label">Updated Stock:</span>
+                                    <span class="tx-calc-val positive" id="returnNewStockDisplay">--</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-secondary" id="btnSubmitStockReturn">
+                                <svg class="icon-inline"><use href="#icon-return"/></svg>
+                                <span>Process Stock Return (↩)</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Transaction Audit Log Table Section -->
+                <div class="section-header" style="margin-top: 10px;">
+                    <div>
+                        <h2>Transaction History &amp; Stock Audit</h2>
+                        <p>Complete historical ledger of all stock additions, deductions, and returns.</p>
+                    </div>
+                </div>
+
+                <!-- Filter Panel for Transactions -->
+                <div class="panel filter-panel">
+                    <div class="filter-controls-row">
+                        <div class="search-field-wrapper">
+                            <svg class="field-icon"><use href="#icon-search"/></svg>
+                            <input type="text" id="txSearchInput" placeholder="Search history by item, reference, supplier, or recipient..." autocomplete="off">
+                            <button class="clear-search-btn" id="txClearSearchBtn" title="Clear Search">&times;</button>
+                        </div>
+
+                        <div class="filter-dropdowns">
+                            <select id="txFilterType" class="form-select">
+                                <option value="all">All Movement Types</option>
+                                <option value="Stock-In">Stock-In</option>
+                                <option value="Stock-Out">Stock-Out</option>
+                                <option value="Stock Return">Stock Return</option>
+                            </select>
+
+                            <select id="txFilterItem" class="form-select">
+                                <option value="all">All Stock Items</option>
+                            </select>
+
+                            <button class="btn btn-secondary" id="txFilterResetBtn" title="Reset Filters">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions History Table -->
+                <div class="panel">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Txn ID</th>
+                                    <th>Date &amp; Time</th>
+                                    <th>Stock Item</th>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Balance</th>
+                                    <th>Counterparty (Supplier / Recipient)</th>
+                                    <th>Reference #</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="empty-state" id="transactionsEmptyState" style="display: none;">
+                        <div class="empty-state-icon">
+                            <svg class="icon-inline" style="width: 48px; height: 48px;"><use href="#icon-transactions"/></svg>
+                        </div>
+                        <h3>No Transactions Recorded</h3>
+                        <p>Perform a Stock-In, Stock-Out, or Return to record inventory movements in this ledger.</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 6. DEVICE MAINTENANCE VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-maintenance">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Device Maintenance &amp; Repair History</h2>
+                        <p>Track hardware diagnostics, part replacements, routine servicing, and repair expenses for physical devices.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" id="maintenanceAddBtn">
+                            <svg class="icon-inline"><use href="#icon-plus"/></svg>
+                            <span>Schedule Maintenance</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Maintenance Metric Cards -->
+                <div class="stats-grid maintenance-stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper amber">
+                            <svg class="icon-inline"><use href="#icon-maintenance"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Active Work Orders</p>
+                            <h2 id="maintActiveCount">0</h2>
+                            <span class="stat-sub warning">Scheduled &amp; In Progress</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper green">
+                            <svg class="icon-inline"><use href="#icon-check"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Completed Tickets</p>
+                            <h2 id="maintCompletedCount">0</h2>
+                            <span class="stat-sub positive">Serviced successfully</span>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon-wrapper blue">
+                            <svg class="icon-inline"><use href="#icon-activity"/></svg>
+                        </div>
+                        <div class="stat-details">
+                            <p>Total Maintenance Cost</p>
+                            <h2 id="maintTotalCost">$0</h2>
+                            <span class="stat-sub">Cumulative expense</span>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Maintenance Filter Toolbar -->
+                <div class="panel filter-panel">
+                    <div class="filter-controls-row">
+                        <div class="search-field-wrapper">
+                            <svg class="field-icon"><use href="#icon-search"/></svg>
+                            <input type="text" id="maintenanceSearchInput" placeholder="Search maintenance by device, issue, or technician..." autocomplete="off">
+                        </div>
+
+                        <div class="filter-dropdowns">
+                            <select id="filterMaintStatus" class="form-select">
+                                <option value="all">All Statuses</option>
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+
+                            <select id="filterMaintType" class="form-select">
+                                <option value="all">All Types</option>
+                                <option value="Preventive">Preventive</option>
+                                <option value="Repair">Repair</option>
+                                <option value="Inspection">Inspection</option>
+                                <option value="Upgrade">Upgrade</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintenance Table -->
+                <div class="panel">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Device</th>
+                                    <th>Issue / Task</th>
+                                    <th>Type</th>
+                                    <th>Scheduled Date</th>
+                                    <th>Cost</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="maintenanceTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="empty-state" id="maintenanceEmptyState" style="display: none;">
+                        <div class="empty-state-icon">
+                            <svg class="icon-inline" style="width: 48px; height: 48px;"><use href="#icon-maintenance"/></svg>
+                        </div>
+                        <h3>No Maintenance Records</h3>
+                        <p>No active repair or servicing tickets match your criteria.</p>
+                        <button class="btn btn-primary" id="maintenanceEmptyAddBtn">Schedule Maintenance</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 7. ACTIVITY LOGS VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-activity">
+
+                <div class="section-header">
+                    <div>
+                        <h2>System Activity Logs &amp; Audit Trail</h2>
+                        <p>Chronological history of all device operations, stock adjustments, scans, and administrative changes.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" id="activityExportBtn">
+                            <svg class="icon-inline"><use href="#icon-download"/></svg>
+                            <span>Export Logs (CSV)</span>
+                        </button>
+                        <button class="btn btn-danger-ghost" id="activityClearBtn">
+                            <svg class="icon-inline"><use href="#icon-trash"/></svg>
+                            <span>Clear Logs</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activity Filters -->
+                <div class="panel filter-panel">
+                    <div class="filter-controls-row">
+                        <div class="search-field-wrapper">
+                            <svg class="field-icon"><use href="#icon-search"/></svg>
+                            <input type="text" id="activitySearchInput" placeholder="Search activity logs..." autocomplete="off">
+                        </div>
+
+                        <div class="filter-dropdowns">
+                            <select id="filterActivityType" class="form-select">
+                                <option value="all">All Action Types</option>
+                                <option value="Device Created">Device Created</option>
+                                <option value="Device Updated">Device Updated</option>
+                                <option value="Device Deleted">Device Deleted</option>
+                                <option value="Stock Item Created">Stock Item Created</option>
+                                <option value="Stock-In">Stock-In</option>
+                                <option value="Stock-Out">Stock-Out</option>
+                                <option value="Stock Return">Stock Return</option>
+                                <option value="QR Scanned">QR Scanned</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="System">System</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Timeline List -->
+                <div class="panel">
+                    <div class="activity-timeline full-timeline" id="fullActivityLogList">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div class="empty-state" id="activityEmptyState" style="display: none;">
+                        <div class="empty-state-icon">
+                            <svg class="icon-inline" style="width: 48px; height: 48px;"><use href="#icon-activity"/></svg>
+                        </div>
+                        <h3>No Activity Records</h3>
+                        <p>System audit trail is empty.</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 8. CATEGORIES VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-categories">
+
+                <div class="section-header">
+                    <div>
+                        <h2>Inventory Categories</h2>
+                        <p>Standardized categories for <strong>Device Assets</strong> and <strong>Stock Consumables</strong> with ID prefixes.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-primary" id="categoryAddBtn">
+                            <svg class="icon-inline"><use href="#icon-plus"/></svg>
+                            <span>Add Category</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category Type Filter Tabs -->
+                <div class="panel filter-panel" style="margin-bottom: 20px;">
+                    <div class="filter-controls-row">
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-primary" id="catFilterAll">All Categories</button>
+                            <button class="btn btn-sm btn-secondary" id="catFilterDevices">Device Categories</button>
+                            <button class="btn btn-sm btn-secondary" id="catFilterStock">Stock Categories</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Grid -->
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Populated dynamically -->
+                </div>
+
+            </div>
+
+
+            <!-- ==============================================
+                 9. SETTINGS VIEW
+            =============================================== -->
+            <div class="tab-view" id="tab-settings">
+
+                <div class="section-header">
+                    <div>
+                        <h2>System Settings</h2>
+                        <p>Configure organization branding, currency, scanner parameters, and data backups.</p>
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+
+                    <!-- Organization Settings -->
+                    <div class="panel">
+                        <h3>Organization Details</h3>
+                        <p class="panel-sub">Branding displayed on QR tags, reports, and headers</p>
+
+                        <form id="generalSettingsForm" class="settings-form">
+                            <div class="form-group">
+                                <label for="settingOrgName">Organization / Company Name</label>
+                                <input type="text" id="settingOrgName" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="settingCurrency">Currency Symbol</label>
+                                <select id="settingCurrency" class="form-select">
+                                    <option value="$">USD ($)</option>
+                                    <option value="€">EUR (€)</option>
+                                    <option value="£">GBP (£)</option>
+                                    <option value="₹">INR (₹)</option>
+                                    <option value="A$">AUD (A$)</option>
+                                    <option value="C$">CAD (C$)</option>
+                                    <option value="¥">JPY (¥)</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Organization Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Scanner Preferences -->
+                    <div class="panel">
+                        <h3>Scanner Preferences</h3>
+                        <p class="panel-sub">Camera recognition behavior and audio cues</p>
+
+                        <form id="scannerSettingsForm" class="settings-form">
+                            <div class="toggle-option-row">
+                                <div>
+                                    <strong>Audio Chime on QR Scan</strong>
+                                    <p class="text-muted">Play sound upon successful QR recognition</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="settingSoundToggle" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-option-row">
+                                <div>
+                                    <strong>Auto-Open Details Modal on Scan</strong>
+                                    <p class="text-muted">Immediately pop up full tag passport</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="settingAutoOpenModal">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label for="settingScanCooldown">Scan Cooldown (Prevents duplicates)</label>
+                                <select id="settingScanCooldown" class="form-select">
+                                    <option value="1500">1.5 Seconds</option>
+                                    <option value="2500" selected>2.5 Seconds (Recommended)</option>
+                                    <option value="4000">4.0 Seconds</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Scanner Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Data Backup & Restore -->
+                    <div class="panel">
+                        <h3>Data Backup &amp; Portability</h3>
+                        <p class="panel-sub">Export or import complete JSON database (Devices, Stock, Transactions, Maintenance, Logs)</p>
+
+                        <div class="backup-actions">
+                            <div class="backup-action-card">
+                                <div>
+                                    <strong>Download Complete Backup</strong>
+                                    <p class="text-muted">Export all system records to a portable JSON file.</p>
+                                </div>
+                                <button class="btn btn-secondary" id="exportBackupBtn">
+                                    <svg class="icon-inline"><use href="#icon-download"/></svg>
+                                    <span>Export JSON</span>
+                                </button>
+                            </div>
+
+                            <div class="backup-action-card">
+                                <div>
+                                    <strong>Restore from Backup</strong>
+                                    <p class="text-muted">Load a previously saved TrackQR JSON file.</p>
+                                </div>
+                                <div>
+                                    <input type="file" id="importBackupInput" accept=".json" style="display: none;">
+                                    <button class="btn btn-secondary" id="importBackupTriggerBtn">
+                                        <svg class="icon-inline"><use href="#icon-download" style="transform: rotate(180deg);"/></svg>
+                                        <span>Import JSON</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset & Danger Zone -->
+                    <div class="panel danger-zone-panel">
+                        <h3>Demo Data &amp; Reset</h3>
+                        <p class="panel-sub">Restore baseline demonstration data or wipe client storage</p>
+
+                        <div class="danger-row">
+                            <div>
+                                <strong>Restore Default Demo Records</strong>
+                                <p class="text-muted">Re-populate sample devices, stock items, and historical transactions.</p>
+                            </div>
+                            <button class="btn btn-secondary" id="resetDemoDataBtn">Reset to Demo Data</button>
+                        </div>
+
+                        <div class="danger-row" style="margin-top: 15px;">
+                            <div>
+                                <strong>Wipe Entire Local Storage</strong>
+                                <p class="text-muted">Permanently erase all stored records in this browser.</p>
+                            </div>
+                            <button class="btn btn-danger" id="wipeAllDataBtn">Wipe All Data</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Page Footer -->
+            <footer class="app-footer">
+                <p>TrackQR &bull; Dual-Module Device &amp; Stock Management System &bull; Frontend Ready for Node/MongoDB Integration</p>
+            </footer>
+
+        </main>
+    </div>
+
+
+    <!-- ==============================================
+         MODALS & DIALOGS
+    =============================================== -->
+
+    <!-- 1. DEVICE MODAL (Add / Edit Device) -->
+    <div class="modal-backdrop" id="deviceModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="deviceModalTitle">Register New Device</h3>
+                <button class="modal-close-btn" id="closeDeviceModalBtn">&times;</button>
+            </div>
+
+            <form id="deviceModalForm">
+                <div class="modal-body">
+                    <input type="hidden" id="deviceFormMode" value="add">
+                    <input type="hidden" id="deviceFormOriginalId" value="">
+
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="inputDeviceName">Device Name <span class="required">*</span></label>
+                            <input type="text" id="inputDeviceName" class="form-input" placeholder="e.g. MacBook Pro 16 M2 Max" required>
+                            <div class="form-error" id="errorDeviceName"></div>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceCategory">Category <span class="required">*</span></label>
+                            <select id="inputDeviceCategory" class="form-select" required>
+                                <option value="">Select Category</option>
+                            </select>
+                            <div class="form-error" id="errorDeviceCategory"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceId">Asset ID <span class="required">*</span></label>
+                            <div class="input-id-wrapper">
+                                <input type="text" id="inputDeviceId" class="form-input" placeholder="e.g. LAP-001" uppercase required>
+                                <button type="button" class="btn btn-sm btn-ghost" id="regenerateDeviceIdBtn" title="Auto-generate next sequential ID">Auto</button>
+                            </div>
+                            <small class="form-hint">Category prefix + 3 digit sequential index</small>
+                            <div class="form-error" id="errorDeviceId"></div>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceSerial">Serial Number <span class="required">*</span></label>
+                            <input type="text" id="inputDeviceSerial" class="form-input" placeholder="Manufacturer Serial Number" required>
+                            <div class="form-error" id="errorDeviceSerial"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceLocation">Location <span class="required">*</span></label>
+                            <input type="text" id="inputDeviceLocation" class="form-input" placeholder="e.g. Floor 3 - Engineering" required>
+                            <div class="form-error" id="errorDeviceLocation"></div>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceStatus">Status <span class="required">*</span></label>
+                            <select id="inputDeviceStatus" class="form-select" required>
+                                <option value="Available">Available</option>
+                                <option value="In Use">In Use</option>
+                                <option value="Under Maintenance">Under Maintenance</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceCondition">Condition <span class="required">*</span></label>
+                            <select id="inputDeviceCondition" class="form-select" required>
+                                <option value="New">New</option>
+                                <option value="Good" selected>Good</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Damaged">Damaged</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceDate">Purchase Date <span class="required">*</span></label>
+                            <input type="date" id="inputDeviceDate" class="form-input" required>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputDeviceCost">Purchase Cost ($)</label>
+                            <input type="number" id="inputDeviceCost" class="form-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputDeviceAssigned">Assigned Person / Department</label>
+                        <input type="text" id="inputDeviceAssigned" class="form-input" placeholder="e.g. Sarah Jenkins (Lead Dev)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputDeviceNotes">Specifications &amp; Notes</label>
+                        <textarea id="inputDeviceNotes" class="form-textarea" rows="2" placeholder="Hardware specs, warranty info, or configuration notes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelDeviceModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveDeviceSubmitBtn">Save Device</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 2. STOCK ITEM MODAL (Add / Edit Stock Item) -->
+    <div class="modal-backdrop" id="stockModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="stockModalTitle">Add Stock Item</h3>
+                <button class="modal-close-btn" id="closeStockModalBtn">&times;</button>
+            </div>
+
+            <form id="stockModalForm">
+                <div class="modal-body">
+                    <input type="hidden" id="stockFormMode" value="add">
+                    <input type="hidden" id="stockFormOriginalId" value="">
+
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="inputStockName">Item Name <span class="required">*</span></label>
+                            <input type="text" id="inputStockName" class="form-input" placeholder="e.g. USB-C to HDMI 4K Cable (2m)" required>
+                            <div class="form-error" id="errorStockName"></div>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputStockCategory">Category <span class="required">*</span></label>
+                            <select id="inputStockCategory" class="form-select" required>
+                                <option value="">Select Category</option>
+                            </select>
+                            <div class="form-error" id="errorStockCategory"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputStockId">Stock Item ID <span class="required">*</span></label>
+                            <div class="input-id-wrapper">
+                                <input type="text" id="inputStockId" class="form-input" placeholder="e.g. STK-CBL-001" uppercase required>
+                                <button type="button" class="btn btn-sm btn-ghost" id="regenerateStockIdBtn" title="Auto-generate stock ID">Auto</button>
+                            </div>
+                            <small class="form-hint">Prefix STK + category code + index</small>
+                            <div class="form-error" id="errorStockId"></div>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputStockQuantity">Available Quantity <span class="required">*</span></label>
+                            <input type="number" id="inputStockQuantity" class="form-input" min="0" step="1" placeholder="e.g. 25" required>
+                            <div class="form-error" id="errorStockQuantity"></div>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputStockMinLevel">Minimum Stock Level <span class="required">*</span></label>
+                            <input type="number" id="inputStockMinLevel" class="form-input" min="0" step="1" placeholder="e.g. 10" required>
+                            <small class="form-hint">Triggers low-stock alert</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputStockUnit">Unit of Measure <span class="required">*</span></label>
+                            <select id="inputStockUnit" class="form-select" required>
+                                <option value="pcs" selected>Pieces (pcs)</option>
+                                <option value="boxes">Boxes</option>
+                                <option value="packs">Packs</option>
+                                <option value="meters">Meters</option>
+                                <option value="rolls">Rolls</option>
+                                <option value="units">Units</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputStockLocation">Storage Location <span class="required">*</span></label>
+                            <input type="text" id="inputStockLocation" class="form-input" placeholder="e.g. Cabinet A - Shelf 1" required>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputStockUnitCost">Unit Cost ($)</label>
+                            <input type="number" id="inputStockUnitCost" class="form-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputStockSupplier">Preferred Supplier / Vendor</label>
+                        <input type="text" id="inputStockSupplier" class="form-input" placeholder="e.g. Anker Direct or CableMatters">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputStockNotes">Description &amp; Reorder Notes</label>
+                        <textarea id="inputStockNotes" class="form-textarea" rows="2" placeholder="Part numbers, specifications, or preferred order quantities..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelStockModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveStockSubmitBtn">Save Stock Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 3. QUICK STOCK MOVEMENT MODAL -->
+    <div class="modal-backdrop" id="stockMovementModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="quickMoveModalTitle">Quick Stock Movement</h3>
+                <button class="modal-close-btn" id="closeQuickMoveModalBtn">&times;</button>
+            </div>
+
+            <form id="quickMoveForm">
+                <div class="modal-body">
+                    <input type="hidden" id="quickMoveStockItemId" value="">
+
+                    <div class="form-group">
+                        <label>Item Name &amp; ID</label>
+                        <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);" id="quickMoveItemName">Item Name</div>
+                        <small id="quickMoveItemMeta" class="text-muted">ID: STK-001 | Current Stock: 20 pcs</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="quickMoveType">Movement Action <span class="required">*</span></label>
+                            <select id="quickMoveType" class="form-select" required>
+                                <option value="Stock-In">Stock-In (Receive Inventory +)</option>
+                                <option value="Stock-Out">Stock-Out (Issue Supplies -)</option>
+                                <option value="Stock Return">Stock Return (Return to Inventory ↩)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="quickMoveQty">Quantity <span class="required">*</span></label>
+                            <input type="number" id="quickMoveQty" class="form-input" min="1" step="1" placeholder="Quantity" required>
+                            <div class="form-error" id="quickMoveQtyError" style="display: none;">Cannot exceed available stock!</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="quickMoveParty" id="quickMovePartyLabel">Supplier / Recipient <span class="required">*</span></label>
+                            <input type="text" id="quickMoveParty" class="form-input" placeholder="Supplier or Recipient name" required>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="quickMoveRef">Reference # (PO / REQ / RET)</label>
+                            <input type="text" id="quickMoveRef" class="form-input" placeholder="e.g. PO-8812">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quickMoveNotes">Notes / Purpose</label>
+                        <input type="text" id="quickMoveNotes" class="form-input" placeholder="Reason for stock movement...">
+                    </div>
+
+                    <!-- Live Calculation Preview -->
+                    <div class="tx-calculation-preview" id="quickMoveCalcPreview">
+                        <div class="tx-calc-item">
+                            <span class="tx-calc-label">Available:</span>
+                            <span class="tx-calc-val" id="quickMovePrevStock">--</span>
+                        </div>
+                        <span class="tx-calc-arrow">&rarr;</span>
+                        <div class="tx-calc-item">
+                            <span class="tx-calc-label">Updated:</span>
+                            <span class="tx-calc-val" id="quickMoveNewStock">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelQuickMoveBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitQuickMoveBtn">Execute Movement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 4. UNIFIED QR PASSPORT & TAG MODAL (Device or Stock) -->
+    <div class="modal-backdrop" id="qrPassportModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow" id="passportEyebrow">ASSET PASSPORT &amp; QR IDENTIFIER</span>
+                    <h3 id="passportModalTitle">QR Code Tag</h3>
+                </div>
+                <button class="modal-close-btn" id="closePassportModalBtn">&times;</button>
+            </div>
+
+            <div class="modal-body details-modal-layout">
+
+                <!-- Left: Branded Printable Tag Card -->
+                <div class="qr-passport-card" id="printableTagCard">
+                    <div class="tag-header">
+                        <span class="tag-org" id="passportOrgName">GlobalTech Industries</span>
+                        <span class="tag-badge" id="passportTagTypeBadge">ASSET TAG</span>
+                    </div>
+
+                    <!-- Dynamic QR Container -->
+                    <div class="qr-render-box" id="passportQrContainer">
+                        <!-- QRCode.js attaches here -->
+                    </div>
+
+                    <div class="tag-id" id="passportTagId">LAP-001</div>
+                    <div class="tag-name" id="passportTagName">MacBook Pro 16</div>
+                    <div class="tag-category" id="passportTagCategory">Laptops &amp; Computers</div>
+
+                    <div class="tag-footer">
+                        <span>SCAN WITH TRACKQR</span>
+                        <span id="passportTagFooterMeta">OFFICIAL ASSET</span>
+                    </div>
+                </div>
+
+                <!-- Right: Full Details Specs Column -->
+                <div class="details-specs-column">
+                    <div class="specs-hero">
+                        <div>
+                            <span class="badge" id="passportStatusBadge">Available</span>
+                            <h2 id="passportNameDisplay">MacBook Pro 16</h2>
+                            <p class="details-category-sub" id="passportCategoryDisplay">Laptops &amp; Computers</p>
+                        </div>
+                    </div>
+
+                    <div class="specs-grid" id="passportSpecsGrid">
+                        <!-- Dynamically filled with device or stock specs -->
+                    </div>
+
+                    <div id="passportAdditionalActions" style="margin-top: 15px;">
+                        <!-- Dynamic buttons -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer details-footer">
+                <div class="footer-left-actions">
+                    <button class="btn btn-outline-danger" id="passportDeleteBtn">
+                        <svg class="icon-inline"><use href="#icon-trash"/></svg>
+                        <span>Delete Record</span>
+                    </button>
+                    <button class="btn btn-secondary" id="passportEditBtn">
+                        <svg class="icon-inline"><use href="#icon-edit"/></svg>
+                        <span>Edit Details</span>
+                    </button>
+                </div>
+
+                <div class="footer-right-actions">
+                    <button class="btn btn-secondary" id="passportDownloadPngBtn">
+                        <svg class="icon-inline"><use href="#icon-download"/></svg>
+                        <span>Download PNG</span>
+                    </button>
+                    <button class="btn btn-primary" id="passportPrintTagBtn">
+                        <svg class="icon-inline"><use href="#icon-print"/></svg>
+                        <span>Print Tag</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 5. CATEGORY MODAL (Add / Edit Category) -->
+    <div class="modal-backdrop" id="categoryModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="categoryModalTitle">Add New Category</h3>
+                <button class="modal-close-btn" id="closeCategoryModalBtn">&times;</button>
+            </div>
+
+            <form id="categoryModalForm">
+                <div class="modal-body">
+                    <input type="hidden" id="categoryFormMode" value="add">
+                    <input type="hidden" id="categoryFormOriginalId" value="">
+
+                    <div class="form-group">
+                        <label for="inputCategoryType">Category Module Type <span class="required">*</span></label>
+                        <select id="inputCategoryType" class="form-select" required>
+                            <option value="device">Device Asset Category</option>
+                            <option value="stock">Stock Consumable Category</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputCategoryName">Category Name <span class="required">*</span></label>
+                        <input type="text" id="inputCategoryName" class="form-input" placeholder="e.g. Cables &amp; Adapters" required>
+                        <div class="form-error" id="errorCategoryName"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputCategoryPrefix">Asset / Stock ID Prefix <span class="required">*</span></label>
+                        <input type="text" id="inputCategoryPrefix" class="form-input" placeholder="e.g. CBL (3-4 uppercase letters)" maxlength="6" uppercase required>
+                        <small class="form-hint">Used to auto-generate IDs (e.g. CBL-001 or STK-CBL-001)</small>
+                        <div class="form-error" id="errorCategoryPrefix"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputCategoryDesc">Description</label>
+                        <textarea id="inputCategoryDesc" class="form-textarea" rows="2" placeholder="Summary of items in this category..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelCategoryModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 6. DEVICE MAINTENANCE MODAL -->
+    <div class="modal-backdrop" id="maintenanceModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="maintenanceModalTitle">Schedule Device Maintenance</h3>
+                <button class="modal-close-btn" id="closeMaintenanceModalBtn">&times;</button>
+            </div>
+
+            <form id="maintenanceModalForm">
+                <div class="modal-body">
+                    <input type="hidden" id="maintenanceFormMode" value="add">
+                    <input type="hidden" id="maintenanceFormId" value="">
+
+                    <div class="form-group">
+                        <label for="inputMaintDevice">Target Device <span class="required">*</span></label>
+                        <select id="inputMaintDevice" class="form-select" required>
+                            <option value="">Select Device to Service</option>
+                        </select>
+                        <div class="form-error" id="errorMaintDevice"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputMaintTitle">Maintenance Issue / Task <span class="required">*</span></label>
+                        <input type="text" id="inputMaintTitle" class="form-input" placeholder="e.g. DisplayPort flickering repair" required>
+                        <div class="form-error" id="errorMaintTitle"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputMaintType">Type <span class="required">*</span></label>
+                            <select id="inputMaintType" class="form-select" required>
+                                <option value="Repair">Repair</option>
+                                <option value="Preventive">Preventive</option>
+                                <option value="Inspection">Inspection</option>
+                                <option value="Upgrade">Upgrade</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputMaintStatus">Status <span class="required">*</span></label>
+                            <select id="inputMaintStatus" class="form-select" required>
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputMaintScheduledDate">Scheduled Date <span class="required">*</span></label>
+                            <input type="date" id="inputMaintScheduledDate" class="form-input" required>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputMaintCompletedDate">Completed Date</label>
+                            <input type="date" id="inputMaintCompletedDate" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="inputMaintCost">Cost / Expense ($)</label>
+                            <input type="number" id="inputMaintCost" class="form-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label for="inputMaintTechnician">Technician / Vendor</label>
+                            <input type="text" id="inputMaintTechnician" class="form-input" placeholder="e.g. Authorized Dell Service">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputMaintNotes">Work Notes &amp; Actions Taken</label>
+                        <textarea id="inputMaintNotes" class="form-textarea" rows="2" placeholder="Diagnostic steps, replaced parts, warranty details..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelMaintenanceModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 7. CONFIRMATION DIALOG MODAL -->
+    <div class="modal-backdrop" id="confirmModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-header">
+                <h3 id="confirmModalTitle">Confirm Action</h3>
+                <button class="modal-close-btn" id="closeConfirmModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmModalMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="confirmModalCancelBtn">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmModalOkBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 8. PRINT SHEET CONTAINER (window.print()) -->
+    <div class="printable-tag-sheet" id="printableTagSheet">
+        <!-- Rendered before print -->
+    </div>
+
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+
+    <!-- ==============================================
+         SCRIPTS: QR Generation & Scanning Libraries
+    =============================================== -->
+    <!-- Offline first with CDN fallback for QRCode.js -->
+    <script src="libs/qrcode.min.js"></script>
+    <script>
+        if (typeof QRCode === 'undefined') {
+            document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- Offline first with CDN fallback for Html5Qrcode -->
+    <script src="libs/html5-qrcode.min.js"></script>
+    <script>
+        if (typeof Html5Qrcode === 'undefined') {
+            document.write('<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"><\/script>');
+        }
+    </script>
+
+    <!-- Main Application Logic -->
+    <script src="script.js"></script>
+    <div id="toastContainer"></div>
+</body>
+</html>
